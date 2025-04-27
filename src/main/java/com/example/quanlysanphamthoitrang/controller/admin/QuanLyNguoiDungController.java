@@ -1,4 +1,4 @@
-package com.example.quanlysanphamthoitrang.controller;
+package com.example.quanlysanphamthoitrang.controller.admin;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,11 +19,11 @@ import com.example.quanlysanphamthoitrang.domain.model.NguoiDung;
 import com.example.quanlysanphamthoitrang.service.NguoiDungService;
 
 @RestController
-@RequestMapping("/user")
-public class NguoiDungController {
+@RequestMapping("/admin/nguoidung")
+public class QuanLyNguoiDungController {
     private final NguoiDungService nguoiDungService;
 
-    public NguoiDungController(NguoiDungService nguoiDungService) {
+    public QuanLyNguoiDungController(NguoiDungService nguoiDungService) {
         this.nguoiDungService = nguoiDungService;
     }
 
@@ -77,24 +77,7 @@ public class NguoiDungController {
     // tìm kiếm theo ID
     @GetMapping("/timkiem")
     public List<NguoiDung> timKiemNguoiDung(@RequestParam("keyword") String keyword) {
-        // List<NguoiDung> danhSachNguoiDung = new ArrayList<>();
-
-        // // tìm theo id
-        // List<NguoiDung> danhSachNguoiDungById =
-        // this.nguoiDungService.timKiemNguoiDungById(keyword);
-
-        // // tìm theo tên đăng nhập
-        // List<NguoiDung> danhSachNguoiDungByTenDangNhap =
-        // this.nguoiDungService.timKiemNguoiDungByTenDangNhap(keyword);
-
-        // kết hợp lại
-        Set<NguoiDung> danhSachKetHop = new HashSet<>();
-        danhSachKetHop.addAll(this.nguoiDungService.timKiemNguoiDungById(keyword));
-        danhSachKetHop.addAll(this.nguoiDungService.timKiemNguoiDungByTenDangNhap(keyword));
-
-        // danhSachNguoiDung.addAll(danhSachKetHop);
-        return new ArrayList<>(danhSachKetHop);
-
+        return this.nguoiDungService.timKiemNguoiDung(keyword);
     }
 
 }
