@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thêm Sản Phẩm</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jodit@3.24.7/build/jodit.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jodit@3.24.7/build/jodit.min.js"></script>
+
+  <style>
+    body {
+      background-color: #f0f2f5;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .container {
+      margin-top: 50px;
+    }
+
+    .card {
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #007bff, #00c6ff);
+      color: #fff;
+      font-size: 1.4rem;
+      font-weight: bold;
+      text-align: center;
+      padding: 20px;
+      border-radius: 15px 15px 0 0;
+    }
+
+    .form-label {
+      font-weight: 600;
+    }
+
+    .form-control::placeholder {
+      color: #b0b0b0;
+      font-style: italic;
+    }
+
+    .btn-submit {
+      width: 100%;
+      border-radius: 8px;
+      padding: 10px;
+      font-weight: bold;
+      background: linear-gradient(135deg, #007bff, #00c6ff);
+      border: none;
+      color: white;
+      transition: 0.3s;
+    }
+
+    .btn-submit:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="card-header">🛒 Thêm Sản Phẩm Mới</div>
+      <div class="card-body">
+        <form th:action="@{/admin/sanpham/them}" method="post">
+          <div class="mb-3">
+            <label class="form-label">Tên sản phẩm</label>
+            <input type="text" name="ten" class="form-control" placeholder="Nhập tên sản phẩm ví dụ: Áo Hoodie Nam"
+              required />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Loại</label>
+            <input type="text" name="loai" class="form-control" placeholder="Ví dụ: Áo, Quần, Phụ kiện..." required />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Thương hiệu</label>
+            <input type="text" name="thuongHieu" class="form-control" placeholder="Ví dụ: Nike, Adidas, Local Brand..."
+              required />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Giá (VNĐ)</label>
+            <input type="number" name="gia" class="form-control" placeholder="Ví dụ: 350000" required />
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Màu sắc</label>
+              <input type="text" name="mauSac" class="form-control" placeholder="Ví dụ: Đen, Trắng, Xanh..." />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Kích thước</label>
+              <input type="text" name="kichThuoc" class="form-control" placeholder="Ví dụ: S, M, L, XL..." />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Tình trạng</label>
+            <select name="tinhTrang" class="form-select">
+              <option value="Mới">Mới</option>
+              <option value="Đã sử dụng">Đã sử dụng</option>
+              <option value="Hết hàng">Hết hàng</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Mô tả sản phẩm (ảnh/video qua URL)</label>
+            <textarea id="moTaHtml" name="moTaHtml"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-submit">
+            <i class="fas fa-save me-2"></i> Lưu sản phẩm
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const editor = new Jodit("#moTaHtml", {
+      height: 400,
+      uploader: {
+        insertImageAsBase64URI: false
+      },
+      askBeforePasteHTML: false,
+      askBeforePasteFromWord: false,
+      buttons: [
+        "bold", "italic", "underline", "|",
+        "ul", "ol", "|",
+        "link", "image", "video", "|",
+        "source"
+      ]
+    });
+  </script>
+</body>
+
+</html>

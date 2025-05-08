@@ -45,15 +45,6 @@ public class NguoiDungService {
         this.nguoiDungRepository.deleteById(id);
     }
 
-    //    // tìm kiếm người dùng theo id
-//    public List<NguoiDung> timKiemNguoiDungById(String id) {
-//        return this.nguoiDungRepository.findByIdContainingIgnoreCase(id);
-//    }
-//
-//    // tìm kiếm người dùng theo tên đăng nhập
-//    public List<NguoiDung> timKiemNguoiDungByTenDangNhap(String id) {
-//        return this.nguoiDungRepository.findByTenDangNhapContainingIgnoreCase(id);
-//    }
     // Tìm kiếm người dùng
     public List<NguoiDung> timKiemNguoiDung(String keyword) {
         return this.nguoiDungRepository.timKiemNguoiDung(keyword);

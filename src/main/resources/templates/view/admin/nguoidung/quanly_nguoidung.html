@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="|Danh Sách Người Dùng|">Danh Sách Người Dùng</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jodit@3.24.7/build/jodit.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/jodit@3.24.7/build/jodit.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            padding: 1rem;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .modal-content {
+            border-radius: 10px;
+        }
+
+        .modal-header {
+            background-color: #0d6efd;
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .modal-title {
+            font-weight: bold;
+        }
+
+        .btn-close {
+            background-color: white;
+        }
+
+        .input-group {
+            flex-wrap: wrap;
+        }
+
+        .input-group .form-control {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 576px) {
+            .btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        .search-box {
+            border-radius: 30px;
+            border: 1px solid #ccc;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            box-shadow: none;
+            background: transparent;
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        .search-box button {
+            background: none;
+            border: none;
+            color: #4285f4;
+            font-size: 1.2rem;
+            padding-left: 10px;
+            cursor: pointer;
+        }
+
+        .search-box button:hover {
+            color: #0b66c3;
+        }
+
+        @media (max-width: 576px) {
+            .search-action-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-action-wrapper>div {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .search-action-wrapper>div:last-child {
+                margin-bottom: 0;
+            }
+
+            #openModalBtn-create {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="mb-3 d-flex justify-content-between align-items-center search-action-wrapper flex-wrap gap-2">
+            <!-- Ô tìm kiếm giống Google -->
+            <div class="flex-grow-1 me-2">
+                <form th:action="@{/admin/nguoidung/timkiem}" method="get">
+                    <div class="search-box">
+                        <input type="text" name="keyword" placeholder="Tìm kiếm người dùng..." />
+                        <button type="submit" title="Tìm kiếm">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Nút Thêm -->
+            <div>
+                <button id="openModalBtn-create" class="btn btn-success">
+                    <i class="fas fa-user-plus me-1"></i> Thêm Người Dùng
+                </button>
+            </div>
+        </div>
+
+        <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            Người dùng đã được cập nhật thành công!
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            Không tìm thấy người dùng để sửa.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Success message for user creation -->
+        <div th:if="${param.userCreatedSuccess}" class="alert alert-success alert-dismissible fade show" role="alert">
+            Người dùng đã được tạo thành công!
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Error message for user creation -->
+        <!-- <div th:if="${param.userCreatedError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            Không thể tạo người dùng. Vui lòng thử lại.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div> -->
+
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>STT</th>
+                        <th>ID</th>
+                        <th>Tên đăng nhập</th>
+                        <th>Email</th>
+                        <th>Mật khẩu</th>
+                        <th>Vai trò</th>
+                        <th>Ngày tạo</th>
+                        <th>Ngày cập nhật</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="user, iterStat : ${users}">
+                        <td th:text="${iterStat.count}">1</td>
+                        <td th:text="${user.id}">001</td>
+                        <td th:text="${user.tenDangNhap}">nguyenvana</td>
+                        <td th:text="${user.email}">email</td>
+                        <td th:text="${user.matKhau}">********</td>
+                        <td th:text="${user.vaiTro}">Admin</td>
+                        <td th:text="${#temporals.format(user.ngayTao, 'yyyy-MM-dd')}">2025-04-01</td>
+                        <td th:text="${#temporals.format(user.ngayCapNhat, 'yyyy-MM-dd')}">2025-04-01</td>
+                        <td>
+                            <div class="d-flex flex-column flex-sm-row gap-2">
+                                <a th:href="@{/admin/nguoidung/chitiet/{id}(id=${user.id})}"
+                                    class="btn btn-success btn-sm">
+                                    <i class="fas fa-eye"></i> Chi tiết
+                                </a>
+                                <a th:href="@{/admin/nguoidung/sua/{id}(id=${user.id})}" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit"></i> Sửa
+                                </a>
+                                <form th:action="@{/admin/nguoidung/xoa/{id}(id=${user.id})}" method="post"
+                                    onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i> Xóa
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="modal fade" id="myModal-create" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Thêm Người Dùng Mới</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form th:action="@{/admin/nguoidung/them}" method="POST">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Tên đăng nhập</label>
+                                <input type="text" class="form-control" id="name" name="tenDangNhap" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Mật khẩu</label>
+                                <input type="password" class="form-control" id="password" name="matKhau" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="role" class="form-label">Vai trò</label>
+                                <select class="form-select" id="role" name="vaiTro" required>
+                                    <option
+                                        th:each="role : ${T(com.example.quanlysanphamthoitrang.domain.enums.VaiTro).values()}"
+                                        th:value="${role}" th:text="${role}">
+                                    </option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Thêm Người Dùng</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        document.getElementById("openModalBtn-create").onclick = function () {
+            const myModal = new bootstrap.Modal(document.getElementById('myModal-create'));
+            myModal.show();
+        };
+    </script>
+</body>
+
+</html>
