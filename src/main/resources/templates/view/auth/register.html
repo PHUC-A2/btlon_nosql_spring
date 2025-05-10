@@ -65,34 +65,44 @@
     <div class="register-form">
         <div class="form-title">
             <h2>Đăng Ký Tài Khoản</h2>
-            <p>Chào mừng đến với FashionStore</p>
         </div>
-        <form action="/dang-ky" method="post">
+        <form th:action="@{/register}" th:object="${registerNguoiDung}" method="post">
+            <div th:if="${error}" class="alert alert-danger" role="alert">
+                <span th:text="${error}"></span>
+            </div>
             <div class="mb-3">
                 <label for="tenDangNhap" class="form-label">Tên đăng nhập</label>
-                <input type="text" class="form-control" id="tenDangNhap" name="tenDangNhap" required>
+                <input type="text" class="form-control" id="tenDangNhap" name="tenDangNhap" th:field="*{tenDangNhap}"
+                    required>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Địa chỉ Email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
+                <input type="email" class="form-control" id="email" name="email" required th:field="*{email}">
             </div>
             <div class="mb-3">
                 <label for="matKhau" class="form-label">Mật khẩu</label>
-                <input type="password" class="form-control" id="matKhau" name="matKhau" required>
+                <input type="password" class="form-control" id="matKhau" name="matKhau" required th:field="*{matKhau}">
             </div>
             <div class="mb-3">
                 <label for="xacNhanMatKhau" class="form-label">Xác nhận mật khẩu</label>
-                <input type="password" class="form-control" id="xacNhanMatKhau" name="xacNhanMatKhau" required>
+                <input type="password" class="form-control" id="xacNhanMatKhau" name="xacNhanMatKhau" required
+                    th:field="*{xacNhanMatKhau}">
             </div>
             <div class="mb-4">
                 <label for="vaiTro" class="form-label">Vai trò</label>
                 <select class="form-select" id="vaiTro" name="vaiTro" required>
-                    <option value="">-- Chọn vai trò --</option>
-                    <option value="USER">Người dùng</option>
-                    <option value="ADMIN">Quản trị viên</option>
+                    <option value="" selected disabled>-- Chọn vai trò --</option>
+                    <!-- <option value="USER">Người dùng</option>
+                    <option value="ADMIN">Quản trị viên</option> -->
+                    <option th:each="role : ${danhSachVaiTro}" th:value="${role}" th:text="${role}">
+
+                    </option>
                 </select>
             </div>
             <button type="submit" class="btn btn-warning">Đăng Ký</button>
+            <div class="mt-3 text-center text-warning">
+                <p>Đã có tài khoản? <a class="text-decoration-none text-warning" th:href="@{/login}">Đăng nhập</a></p>
+            </div>
         </form>
     </div>
 

@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.quanlysanphamthoitrang.domain.enums.VaiTro;
 import com.example.quanlysanphamthoitrang.domain.model.NguoiDung;
+import com.example.quanlysanphamthoitrang.domain.model.dto.RegisterDTO;
 import com.example.quanlysanphamthoitrang.repository.NguoiDungRepository;
 
 @Service
@@ -49,4 +51,24 @@ public class NguoiDungService {
     public List<NguoiDung> timKiemNguoiDung(String keyword) {
         return this.nguoiDungRepository.timKiemNguoiDung(keyword);
     }
+
+    // lấy người dùng bằng email auth
+    public NguoiDung getNguoiDungByEmail(String email) {
+        return this.nguoiDungRepository.findByEmail(email);
+    }
+
+    public boolean isAdminExists() {
+        return this.nguoiDungRepository.existsByVaiTro(VaiTro.ADMIN);
+    }
+
+    // xử lý đăng ký
+    public NguoiDung registerDTOtoNguoiDung(RegisterDTO registerDTO) {
+        NguoiDung nguoiDung = new NguoiDung();
+        nguoiDung.setTenDangNhap(registerDTO.getTenDangNhap());
+        nguoiDung.setEmail(registerDTO.getEmail());
+        nguoiDung.setMatKhau(registerDTO.getMatKhau());
+        nguoiDung.setVaiTro(registerDTO.getVaiTro());
+        return nguoiDung;
+    }
+
 }
