@@ -71,4 +71,10 @@ public class NguoiDungService {
         return nguoiDung;
     }
 
+    // lấy tổng số người dùng
+
+    public long layTongSoNguoiDung() {
+        return this.nguoiDungRepository.count();
+    }
+
 }

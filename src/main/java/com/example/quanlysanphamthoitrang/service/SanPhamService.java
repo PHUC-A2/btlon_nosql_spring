@@ -48,4 +48,9 @@ public class SanPhamService {
     public List<SanPham> timKiemSanPham(String keyword) {
         return this.sanPhamRepository.timKiemSanPham(keyword);
     }
+
+    // lấy tổng số sản phẩm
+    public long layTongSoSanPham() {
+        return this.sanPhamRepository.count();
+    }
 }

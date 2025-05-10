@@ -148,7 +148,8 @@
                             Người dùng</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-cog me-2"></i> Cài đặt</a>
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#myModal"><i
+                                class="fas fa-user me-2"></i> Thông tin cá nhân</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="javascript:void(0);"
@@ -165,7 +166,8 @@
                     <span class="navbar-brand mb-0 h4">Dashboard</span>
                     <div class="ms-auto d-flex align-items-center">
                         <span class="me-3">Xin chào, <strong>Admin</strong></span>
-                        <img src="https://i.pravatar.cc/40" class="rounded-circle" alt="Avatar">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#myModal"><img src="https://i.pravatar.cc/40"
+                                class="rounded-circle" alt="Avatar"></a>
                     </div>
                 </nav>
 
@@ -179,27 +181,15 @@
 
                     <div class="row g-4">
                         <div class="col-md-4" data-aos="fade-up">
-                            <div class="bg-info text-white stat-card">
-                                <h5>Thông tin cá nhân</h5>
-                                <h4 th:text="${nguoiDung.tenDangNhap}">Tên</h4>
-                            </div>
-                        </div>
-                        <div class="col-md-4" data-aos="fade-up">
                             <div class="bg-primary text-white stat-card">
                                 <h5>Tổng sản phẩm</h5>
-                                <h2 class="counter-product" data-target="120">0</h2>
+                                <h2 th:text="${tongSoSanPham}">0</h2>
                             </div>
                         </div>
                         <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
                             <div class="bg-success text-white stat-card">
                                 <h5>Người dùng</h5>
-                                <h2 class="counter-user" data-target="45">0</h2>
-                            </div>
-                        </div>
-                        <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                            <div class="bg-warning text-white stat-card">
-                                <h5>Đơn hàng hôm nay</h5>
-                                <h2 class="counter-order" data-target="15">0</h2>
+                                <h2 th:text="${tongSoNguoiDung}">0</h2>
                             </div>
                         </div>
                     </div>
@@ -211,7 +201,7 @@
                                 <table class="table table-bordered table-hover mt-3">
                                     <thead class="table-dark">
                                         <tr>
-                                            <th>#</th>
+                                            <th>STT</th>
                                             <th>Tên</th>
                                             <th>Loại</th>
                                             <th>Thương hiệu</th>
@@ -224,29 +214,20 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Áo sơ mi nam</td>
-                                            <td>Áo</td>
-                                            <td>Owen</td>
-                                            <td>500.000đ</td>
-                                            <td>Trắng</td>
-                                            <td>M</td>
-                                            <td><span class="badge bg-success">Còn hàng</span></td>
-                                            <td>2025-05-07 23:00:00</td>
-                                            <td>2025-05-07 23:00:00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Quần jean nữ</td>
-                                            <td>Quần</td>
-                                            <td>Levi's</td>
-                                            <td>1.200.000đ</td>
-                                            <td>Xanh</td>
-                                            <td>28</td>
-                                            <td><span class="badge bg-danger">Hết hàng</span></td>
-                                            <td>2025-05-07 23:00:00</td>
-                                            <td>2025-05-07 23:00:00</td>
+                                        <tr th:each="sanPham, iterStat : ${sanPhams}">
+                                            <td th:text="${iterStat.count}">1</td>
+                                            <td th:text="${sanPham.ten}">Áo sơ mi nam</td>
+                                            <td th:text="${sanPham.loai}">Áo</td>
+                                            <td th:text="${sanPham.thuongHieu}">Owen</td>
+                                            <td th:text="${sanPham.gia}">500.000đ</td>
+                                            <td th:text="${sanPham.mauSac}">Trắng</td>
+                                            <td th:text="${sanPham.kichThuoc}">M</td>
+                                            <td th:text="${sanPham.tinhTrang}"><span class="badge bg-success">Còn
+                                                    hàng</span></td>
+                                            <td th:text="${#temporals.format(sanPham.ngayTao, 'dd/MM/yyyy')}">2025-05-07
+                                                23:00:00</td>
+                                            <td th:text="${#temporals.format(sanPham.ngayCapNhat, 'dd/MM/yyyy')}">
+                                                2025-05-07 23:00:00</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -259,7 +240,7 @@
                                 <table class="table table-bordered table-hover mt-3">
                                     <thead class="table-info">
                                         <tr>
-                                            <th>#</th>
+                                            <th>STT</th>
                                             <th>Tên đăng nhập</th>
                                             <th>Email</th>
                                             <th>Vai trò</th>
@@ -268,13 +249,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>admin123</td>
-                                            <td>admin@example.com</td>
-                                            <td>Admin</td>
-                                            <td>2025-05-07 23:00:00</td>
-                                            <td>2025-05-07 23:00:00</td>
+                                        <tr th:each="nguoiDung, iterStat : ${nguoiDungs}">
+                                            <td th:text="${iterStat.count}">
+                                            <td th:text="${nguoiDung.tenDangNhap}">admin123</td>
+                                            <td th:text="${nguoiDung.email}">admin@example.com</td>
+                                            <td th:text="${nguoiDung.vaiTro}">Admin</td>
+                                            <td th:text="${#temporals.format(nguoiDung.ngayTao, 'dd/MM/yyyy')}">
+                                                2025-05-07 23:00:00</td>
+                                            <td th:text="${#temporals.format(nguoiDung.ngayCapNhat, 'dd/MM/yyyy')}">
+                                                2025-05-07 23:00:00</td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
@@ -293,6 +276,73 @@
             </main>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content shadow-lg rounded-4">
+
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="myModalLabel">
+                        <i class="fas fa-user-circle me-2"></i> Thông tin người dùng
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Đóng"></button>
+                </div>
+
+                <div class="modal-body bg-light">
+                    <div class="container py-3">
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold text-secondary">
+                                <i class="fas fa-user"></i> Tên đăng nhập:
+                            </div>
+                            <div class="col-md-8" th:text="${nguoiDung.tenDangNhap}">Ẩn sĩ</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold text-secondary">
+                                <i class="fas fa-envelope"></i> Email:
+                            </div>
+                            <div class="col-md-8" th:text="${nguoiDung.email}">email@example.com</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold text-secondary">
+                                <i class="fas fa-user-tag"></i> Vai trò:
+                            </div>
+                            <div class="col-md-8" th:text="${nguoiDung.vaiTro}">USER</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold text-secondary">
+                                <i class="fas fa-calendar-plus"></i> Ngày tạo:
+                            </div>
+                            <div class="col-md-8" th:text="${#temporals.format(nguoiDung.ngayTao, 'dd/MM/yyyy')}">
+                                01/01/2024
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 fw-bold text-secondary">
+                                <i class="fas fa-calendar-alt"></i> Ngày cập nhật:
+                            </div>
+                            <div class="col-md-8" th:text="${#temporals.format(nguoiDung.ngayCapNhat, 'dd/MM/yyyy')}">
+                                10/05/2025
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> Đóng
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>

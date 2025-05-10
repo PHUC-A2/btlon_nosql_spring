@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 // @RestController
@@ -78,9 +79,9 @@ public class QuanLySanPhamController {
             sanPhamHienTai.setThuongHieu(request.getThuongHieu());
             sanPhamHienTai.setGia(request.getGia());
             sanPhamHienTai.setMauSac(request.getMauSac());
+            sanPhamHienTai.setKichThuoc(request.getKichThuoc());
             sanPhamHienTai.setTinhTrang(request.getTinhTrang());
-            sanPhamHienTai.setNgayTao(request.getNgayTao());
-            sanPhamHienTai.setNgayCapNhat(request.getNgayCapNhat());
+            sanPhamHienTai.setNgayCapNhat(LocalDateTime.now());
             sanPhamHienTai.setMoTaHtml(request.getMoTaHtml());
             this.sanPhamService.suaSanPham(id, sanPhamHienTai);
         }

@@ -109,7 +109,9 @@
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" th:href="@{/user}">Trang Chủ</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/user/sanpham/tatca}">Sản Phẩm</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Tài Khoản</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal"
+                            data-bs-target="#myModal">Tài Khoản</a></li>
+
                     <li class="nav-item"><a class="nav-link" href="javascript:void(0);"
                             onclick="document.getElementById('logoutForm').submit();">Đăng Xuất</a></li>
                     <form id="logoutForm" th:action="@{/logout}" method="post" style="display: none;"></form>
@@ -152,6 +154,73 @@
             <p class="mb-0">© 2025 FashionStore - Thiết kế bởi bạn và ChatGPT ✨</p>
         </div>
     </footer>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content shadow-lg rounded-4">
+
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="myModalLabel">
+                        <i class="fas fa-user-circle me-2"></i> Thông tin người dùng
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Đóng"></button>
+                </div>
+
+                <div class="modal-body bg-light">
+                    <div class="container py-3">
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold text-secondary">
+                                <i class="fas fa-user"></i> Tên đăng nhập:
+                            </div>
+                            <div class="col-md-8" th:text="${nguoiDung.tenDangNhap}">Ẩn sĩ</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold text-secondary">
+                                <i class="fas fa-envelope"></i> Email:
+                            </div>
+                            <div class="col-md-8" th:text="${nguoiDung.email}">email@example.com</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold text-secondary">
+                                <i class="fas fa-user-tag"></i> Vai trò:
+                            </div>
+                            <div class="col-md-8" th:text="${nguoiDung.vaiTro}">USER</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold text-secondary">
+                                <i class="fas fa-calendar-plus"></i> Ngày tạo:
+                            </div>
+                            <div class="col-md-8" th:text="${#temporals.format(nguoiDung.ngayTao, 'dd/MM/yyyy')}">
+                                01/01/2024
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 fw-bold text-secondary">
+                                <i class="fas fa-calendar-alt"></i> Ngày cập nhật:
+                            </div>
+                            <div class="col-md-8" th:text="${#temporals.format(nguoiDung.ngayCapNhat, 'dd/MM/yyyy')}">
+                                10/05/2025
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> Đóng
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
