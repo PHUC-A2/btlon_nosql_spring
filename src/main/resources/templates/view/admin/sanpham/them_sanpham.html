@@ -123,21 +123,44 @@
   </div>
 
   <script>
-    const editor = new Jodit("#moTaHtml", {
-      height: 400,
-      uploader: {
-        insertImageAsBase64URI: false
-      },
-      askBeforePasteHTML: false,
-      askBeforePasteFromWord: false,
-      buttons: [
-        "bold", "italic", "underline", "|",
-        "ul", "ol", "|",
-        "link", "image", "video", "|",
-        "source"
-      ]
+    document.addEventListener("DOMContentLoaded", function () {
+      const editor = new Jodit("#moTaHtml", {
+        height: 400,
+        uploader: {
+          insertImageAsBase64URI: true, // Nhúng ảnh bằng base64
+        },
+        askBeforePasteHTML: false,
+        askBeforePasteFromWord: false,
+        buttons: [
+          "bold", "italic", "underline", "|",
+          "ul", "ol", "|",
+          "link", "image", "video", "|",
+          "source"
+        ]
+      });
+
+      // Bắt sự kiện khi người dùng chọn ảnh để upload
+      editor.events.on("beforeFileUpload", function (files) {
+        if (files.length === 0) return false;
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          if (file.type.startsWith("image/")) {
+            editor.s.insertImage(event.target.result); // chèn ảnh base64
+          } else if (file.type.startsWith("video/")) {
+            const videoTag = `<video controls width="300"><source src="${event.target.result}" type="${file.type}"></video>`;
+            editor.s.insertHTML(videoTag);
+          } else {
+            alert("Chỉ hỗ trợ ảnh và video!");
+          }
+        };
+        reader.readAsDataURL(file);
+        return false; // chặn Jodit xử lý upload mặc định
+      });
     });
   </script>
+
+
 </body>
 
 </html>

@@ -4,37 +4,59 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin - Quản lý</title>
+    <title>Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
     <style>
+        html,
         body {
-            background-color: #f4f6f8;
-            font-family: 'Segoe UI', sans-serif;
-            color: #333;
+            height: 100%;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e3f0ff 0%, #f8fafc 100%);
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+            color: #1a237e;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container-fluid {
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .row {
+            margin: 0;
         }
 
         .sidebar {
             height: 100vh;
-            background-color: #343a40;
+            background: linear-gradient(180deg, #232526 0%, #414345 100%);
             color: #fff;
             transition: all 0.3s;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+            flex-shrink: 0;
+            padding: 0;
         }
 
         .sidebar .nav-link {
-            color: #adb5bd;
-            padding: 15px 20px;
-            display: block;
-            text-decoration: none;
-            transition: background-color 0.3s, padding-left 0.3s;
+            color: #bbdefb;
+            padding: 16px 28px;
+            font-weight: 500;
+            font-size: 1.08rem;
+            border-left: 4px solid transparent;
+            transition: background 0.2s, color 0.2s, border-left 0.2s;
+            margin-bottom: 2px;
         }
 
+        .sidebar .nav-link.active,
         .sidebar .nav-link:hover {
-            background-color: #495057;
+            background: #1976d2;
             color: #fff;
-            padding-left: 25px;
+            border-left: 4px solid #ffc107;
         }
 
         .sidebar .nav-link .fas {
@@ -42,82 +64,214 @@
         }
 
         .sidebar .admin-title {
-            padding: 20px 0;
+            padding: 32px 0 20px 0;
             text-align: center;
-            border-bottom: 1px solid #495057;
+            border-bottom: 1px solid #1976d2;
             margin-bottom: 20px;
+            font-size: 1.6rem;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: transparent;
+            padding: 0;
         }
 
         .navbar {
-            background-color: #fff !important;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            background: #fff !important;
+            box-shadow: 0 1px 3px rgba(25, 118, 210, 0.07);
+            flex-shrink: 0;
+            padding-top: 12px;
+            padding-bottom: 12px;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #1976d2 !important;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+        }
+
+        .container-main {
+            flex: 1 1 auto;
+            padding: 32px 32px 0 32px;
+            display: flex;
+            flex-direction: column;
+            background: transparent;
+        }
+
+        .mb-4 {
+            margin-bottom: 28px !important;
+        }
+
+        .row.g-4 {
+            display: flex;
+            gap: 28px;
+            margin-bottom: 28px;
+            flex-shrink: 0;
+        }
+
+        .col-md-4 {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .stat-card {
+            border-radius: 16px;
+            box-shadow: 0 4px 18px rgba(25, 118, 210, 0.09);
+            padding: 32px 0 22px 0;
+            text-align: center;
+            min-height: 120px;
+            background: linear-gradient(90deg, #1976d2 60%, #42a5f5 100%);
+            color: #fff;
+            margin-bottom: 0;
+        }
+
+        .stat-card.bg-success {
+            background: linear-gradient(90deg, #43cea2 60%, #185a9d 100%);
+        }
+
+        .stat-card h5 {
+            font-size: 1.15rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card h2 {
+            font-size: 2.3rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .btn-modern {
+            background: linear-gradient(90deg, #1976d2 60%, #42a5f5 100%);
+            color: #fff;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.08rem;
+            margin-right: 12px;
+            margin-bottom: 10px;
+            transition: background 0.2s, color 0.2s;
+            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+        }
+
+        .btn-modern:last-child {
+            margin-right: 0;
+        }
+
+        .btn-modern:hover {
+            background: linear-gradient(90deg, #42a5f5 0%, #1976d2 100%);
+            color: #ffc107;
+        }
+
+        .main-content-columns {
+            display: flex;
+            gap: 36px;
+            flex-grow: 1;
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        .product-list-column,
+        .user-list-column {
+            flex: 1 1 0;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-list-column {
+            margin-right: 0;
+        }
+
+        .user-list-column {
+            margin-left: 0;
         }
 
         .table-responsive {
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
+            border-radius: 16px;
+            overflow-x: auto;
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(25, 118, 210, 0.07);
+            margin-bottom: 0;
+            flex: 1 1 0;
+            display: flex;
+            flex-direction: column;
+            padding: 12px 0 12px 0;
+        }
+
+        .table {
+            margin-bottom: 0;
+            border-radius: 12px;
             overflow: hidden;
-            margin-bottom: 20px;
-            /* Add some space between tables on mobile */
+            min-width: 700px;
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .table th,
         .table td {
-            padding: 12px;
+            padding: 12px 8px;
             vertical-align: middle;
+            text-align: center;
+            white-space: nowrap;
         }
 
         .table thead th {
-            background-color: #343a40;
+            background: #1976d2;
             color: #fff;
-            border-bottom: 2px solid #495057;
+            border-bottom: 2px solid #42a5f5;
+        }
+
+        .table-info th {
+            background: #43cea2 !important;
+            color: #fff !important;
+            border-bottom: 2px solid #185a9d !important;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #e3f2fd;
         }
 
         .badge {
             font-weight: 500;
         }
 
-        /* Modern button styles */
-        .btn-modern {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-right: 10px;
-            margin-bottom: 10px;
-            /* Add some bottom margin for mobile */
+        .footer {
+            background: #fff;
+            padding: 20px 0 10px 0;
+            text-align: center;
+            border-top: 2px solid #1976d2;
+            color: #1976d2;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-top: auto;
+            flex-shrink: 0;
+            box-shadow: 0 -2px 12px rgba(25, 118, 210, 0.07);
         }
 
-        .btn-modern:hover {
-            background-color: #0056b3;
-        }
-
-        /* Responsive layout */
-        @media (min-width: 992px) {
+        @media (max-width: 1200px) {
             .main-content-columns {
-                display: flex;
+                flex-direction: column;
+                gap: 18px;
             }
 
-            .product-list-column {
-                flex: 0 0 50%;
-                padding-right: 15px;
+            .container-main {
+                padding: 24px 8px 0 8px;
             }
 
-            .user-list-column {
-                flex: 0 0 50%;
-                padding-left: 15px;
-            }
-        }
-
-        @media (max-width: 991.98px) {
-
-            /* On smaller screens, stack the columns */
-            .product-list-column,
-            .user-list-column {
-                width: 100%;
+            .table {
+                min-width: 600px;
             }
         }
 
@@ -125,18 +279,46 @@
             .sidebar {
                 height: auto;
             }
+
+            .container-main {
+                padding: 16px 2px 0 2px;
+            }
+
+            .table {
+                min-width: 500px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .table {
+                min-width: 400px;
+                font-size: 0.95rem;
+            }
+
+            .stat-card {
+                padding: 18px 0 10px 0;
+            }
+
+            .main-content-columns {
+                gap: 8px;
+            }
+
+            .container-main {
+                padding: 8px 0 0 0;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="container-fluid">
-        <div class="row">
+        <div class="row g-0">
+            <!-- Sidebar -->
             <nav class="col-md-2 sidebar p-0 d-flex flex-column">
-                <h4 class="text-center py-3 admin-title">👑 ADMIN</h4>
+                <div class="admin-title">👑 ADMIN PANEL</div>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-home me-2"></i> Trang chủ</a>
+                        <a class="nav-link active" href="#"><i class="fas fa-home me-2"></i> Trang chủ</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/admin/sanpham/tatca}"><i class="fas fa-box me-2"></i> Quản lý
@@ -144,8 +326,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/admin/nguoidung/tatca}"><i class="fas fa-users me-2"></i> Quản
-                            lý
-                            Người dùng</a>
+                            lý Người dùng</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#myModal"><i
@@ -156,50 +337,46 @@
                             onclick="document.getElementById('logoutForm').submit();"><i
                                 class="fas fa-sign-in-alt me-2"></i> Đăng xuất</a>
                     </li>
-
                     <form id="logoutForm" th:action="@{/logout}" method="post" style="display: none;"></form>
                 </ul>
             </nav>
-
-            <main class="col-md-10">
+            <!-- Main -->
+            <div class="col-md-10 main-content d-flex flex-column p-0">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm px-4 sticky-top">
-                    <span class="navbar-brand mb-0 h4">Dashboard</span>
+                    <span class="navbar-brand mb-0 h4"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</span>
                     <div class="ms-auto d-flex align-items-center">
                         <span class="me-3">Xin chào, <strong>Admin</strong></span>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#myModal"><img src="https://i.pravatar.cc/40"
                                 class="rounded-circle" alt="Avatar"></a>
                     </div>
                 </nav>
-
-                <div class="container py-4">
+                <div class="container-main flex-grow-1 d-flex flex-column">
                     <div class="mb-4">
-                        <a th:href="@{/admin/sanpham/tatca}" class="btn btn-modern"><i class="fas fa-box me-2"></i>
-                            Quản lý Sản phẩm</a>
+                        <a th:href="@{/admin/sanpham/tatca}" class="btn btn-modern"><i class="fas fa-box me-2"></i> Quản
+                            lý Sản phẩm</a>
                         <a th:href="@{/admin/nguoidung/tatca}" class="btn btn-modern"><i class="fas fa-users me-2"></i>
                             Quản lý Người dùng</a>
                     </div>
-
                     <div class="row g-4">
                         <div class="col-md-4" data-aos="fade-up">
-                            <div class="bg-primary text-white stat-card">
+                            <div class="stat-card">
                                 <h5>Tổng sản phẩm</h5>
                                 <h2 th:text="${tongSoSanPham}">0</h2>
                             </div>
                         </div>
                         <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                            <div class="bg-success text-white stat-card">
+                            <div class="stat-card bg-success">
                                 <h5>Người dùng</h5>
                                 <h2 th:text="${tongSoNguoiDung}">0</h2>
                             </div>
                         </div>
                     </div>
-
-                    <div class="mt-5 main-content-columns">
+                    <div class="main-content-columns flex-wrap mt-4">
                         <div class="product-list-column" data-aos="fade-left">
-                            <h4>Danh sách sản phẩm</h4>
+                            <h4 class="mb-3"><i class="fas fa-box me-2"></i>Danh sách sản phẩm</h4>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-hover mt-3">
-                                    <thead class="table-dark">
+                                    <thead>
                                         <tr>
                                             <th>STT</th>
                                             <th>Tên</th>
@@ -222,20 +399,23 @@
                                             <td th:text="${sanPham.gia}">500.000đ</td>
                                             <td th:text="${sanPham.mauSac}">Trắng</td>
                                             <td th:text="${sanPham.kichThuoc}">M</td>
-                                            <td th:text="${sanPham.tinhTrang}"><span class="badge bg-success">Còn
-                                                    hàng</span></td>
+                                            <td>
+                                                <span th:if="${sanPham.tinhTrang == 'Còn hàng'}"
+                                                    class="badge bg-success">Còn hàng</span>
+                                                <span th:if="${sanPham.tinhTrang != 'Còn hàng'}"
+                                                    class="badge bg-secondary" th:text="${sanPham.tinhTrang}"></span>
+                                            </td>
                                             <td th:text="${#temporals.format(sanPham.ngayTao, 'dd/MM/yyyy')}">2025-05-07
-                                                23:00:00</td>
+                                            </td>
                                             <td th:text="${#temporals.format(sanPham.ngayCapNhat, 'dd/MM/yyyy')}">
-                                                2025-05-07 23:00:00</td>
+                                                2025-05-07</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-
                         <div class="user-list-column" data-aos="fade-right" data-aos-delay="100">
-                            <h4>Danh sách người dùng</h4>
+                            <h4 class="mb-3"><i class="fas fa-users me-2"></i>Danh sách người dùng</h4>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-hover mt-3">
                                     <thead class="table-info">
@@ -250,22 +430,14 @@
                                     </thead>
                                     <tbody>
                                         <tr th:each="nguoiDung, iterStat : ${nguoiDungs}">
-                                            <td th:text="${iterStat.count}">
+                                            <td th:text="${iterStat.count}"></td>
                                             <td th:text="${nguoiDung.tenDangNhap}">admin123</td>
                                             <td th:text="${nguoiDung.email}">admin@example.com</td>
                                             <td th:text="${nguoiDung.vaiTro}">Admin</td>
                                             <td th:text="${#temporals.format(nguoiDung.ngayTao, 'dd/MM/yyyy')}">
-                                                2025-05-07 23:00:00</td>
+                                                2025-05-07</td>
                                             <td th:text="${#temporals.format(nguoiDung.ngayCapNhat, 'dd/MM/yyyy')}">
-                                                2025-05-07 23:00:00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>user456</td>
-                                            <td>user@example.com</td>
-                                            <td>User</td>
-                                            <td>2025-05-07 23:00:00</td>
-                                            <td>2025-05-07 23:00:00</td>
+                                                2025-05-07</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -273,7 +445,22 @@
                         </div>
                     </div>
                 </div>
-            </main>
+                <!-- Footer nâng cấp, chỉ để 1 lần, luôn nằm cuối, nổi bật và responsive -->
+                <footer class="footer mt-auto shadow-sm">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 text-md-start text-center mb-2 mb-md-0">
+                                <span class="fw-bold text-primary"><i class="fas fa-crown me-2"></i>Admin Panel</span>
+                                <span class="ms-2 text-secondary">| Trang quản trị hệ thống thời trang</span>
+                            </div>
+                            <div class="col-md-6 text-md-end text-center">
+                                <span class="text-secondary">&copy; 2025 - Thiết kế bởi <span
+                                        class="fw-semibold text-dark">Team 01</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
         </div>
     </div>
 
@@ -281,7 +468,6 @@
     <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content shadow-lg rounded-4">
-
                 <div class="modal-header bg-dark text-white">
                     <h5 class="modal-title" id="myModalLabel">
                         <i class="fas fa-user-circle me-2"></i> Thông tin người dùng
@@ -289,7 +475,6 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Đóng"></button>
                 </div>
-
                 <div class="modal-body bg-light">
                     <div class="container py-3">
                         <div class="row mb-3">
@@ -298,21 +483,18 @@
                             </div>
                             <div class="col-md-8" th:text="${nguoiDung.tenDangNhap}">Ẩn sĩ</div>
                         </div>
-
                         <div class="row mb-3">
                             <div class="col-md-4 fw-bold text-secondary">
                                 <i class="fas fa-envelope"></i> Email:
                             </div>
                             <div class="col-md-8" th:text="${nguoiDung.email}">email@example.com</div>
                         </div>
-
                         <div class="row mb-3">
                             <div class="col-md-4 fw-bold text-secondary">
                                 <i class="fas fa-user-tag"></i> Vai trò:
                             </div>
                             <div class="col-md-8" th:text="${nguoiDung.vaiTro}">USER</div>
                         </div>
-
                         <div class="row mb-3">
                             <div class="col-md-4 fw-bold text-secondary">
                                 <i class="fas fa-calendar-plus"></i> Ngày tạo:
@@ -321,7 +503,6 @@
                                 01/01/2024
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-4 fw-bold text-secondary">
                                 <i class="fas fa-calendar-alt"></i> Ngày cập nhật:
@@ -332,68 +513,19 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="modal-footer bg-light">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times"></i> Đóng
                     </button>
                 </div>
-
             </div>
         </div>
     </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <script>
         AOS.init();
-
-        // Counter Animation (giữ nguyên)
-        const countersProduct = document.querySelectorAll('.counter-product');
-        countersProduct.forEach(counter => {
-            counter.innerText = '0';
-            const updateCounter = () => {
-                const target = +counter.getAttribute('data-target');
-                const current = +counter.innerText;
-                const increment = Math.ceil(target / 100);
-                if (current < target) {
-                    counter.innerText = `${Math.min(current + increment, target)}`;
-                    setTimeout(updateCounter, 20);
-                }
-            };
-            updateCounter();
-        });
-
-        const countersUser = document.querySelectorAll('.counter-user');
-        countersUser.forEach(counter => {
-            counter.innerText = '0';
-            const updateCounter = () => {
-                const target = +counter.getAttribute('data-target');
-                const current = +counter.innerText;
-                const increment = Math.ceil(target / 100);
-                if (current < target) {
-                    counter.innerText = `${Math.min(current + increment, target)}`;
-                    setTimeout(updateCounter, 20);
-                }
-            };
-            updateCounter();
-        });
-
-        const countersOrder = document.querySelectorAll('.counter-order');
-        countersOrder.forEach(counter => {
-            counter.innerText = '0';
-            const updateCounter = () => {
-                const target = +counter.getAttribute('data-target');
-                const current = +counter.innerText;
-                const increment = Math.ceil(target / 100);
-                if (current < target) {
-                    counter.innerText = `${Math.min(current + increment, target)}`;
-                    setTimeout(updateCounter, 20);
-                }
-            };
-            updateCounter();
-        });
     </script>
 </body>
 

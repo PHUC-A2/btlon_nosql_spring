@@ -7,74 +7,43 @@
     <title th:text="|Danh Sách Người Dùng|">Danh Sách Người Dùng</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jodit@3.24.7/build/jodit.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/jodit@3.24.7/build/jodit.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         .container {
-            padding: 1rem;
+            padding: 1.5rem 0.5rem;
+            flex-grow: 1;
         }
 
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        .modal-content {
-            border-radius: 10px;
-        }
-
-        .modal-header {
-            background-color: #0d6efd;
-            color: white;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
-
-        .modal-title {
-            font-weight: bold;
-        }
-
-        .btn-close {
-            background-color: white;
-        }
-
-        .input-group {
-            flex-wrap: wrap;
-        }
-
-        .input-group .form-control {
-            margin-bottom: 0.5rem;
-        }
-
-        @media (max-width: 576px) {
-            .btn {
-                width: 100%;
-                margin-bottom: 0.5rem;
-            }
+        .search-action-wrapper {
+            gap: 1rem;
         }
 
         .search-box {
             border-radius: 30px;
             border: 1px solid #ccc;
-            padding: 6px 12px;
+            padding: 6px 16px;
             display: flex;
             align-items: center;
             background-color: white;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+            max-width: 350px;
+            margin-right: 1rem;
         }
 
         .search-box input {
             border: none;
             outline: none;
-            box-shadow: none;
             background: transparent;
             flex: 1;
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
 
         .search-box button {
@@ -90,83 +59,193 @@
             color: #0b66c3;
         }
 
-        @media (max-width: 576px) {
+        .table-responsive {
+            margin-top: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+            background: #fff;
+            padding: 1rem;
+        }
+
+        table.table {
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            font-weight: 600;
+            vertical-align: middle;
+        }
+
+        .table tbody tr {
+            transition: background 0.2s;
+        }
+
+        .table tbody tr:hover {
+            background: #f1f7ff;
+        }
+
+        .table td,
+        .table th {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .d-flex.gap-2>* {
+            margin-bottom: 0 !important;
+        }
+
+        .btn-sm {
+            min-width: 90px;
+        }
+
+        .modal-content {
+            border-radius: 14px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+            border-top-left-radius: 14px;
+            border-top-right-radius: 14px;
+        }
+
+        .modal-title {
+            font-weight: bold;
+        }
+
+        .footer {
+            background-color: #e9ecef;
+            padding: 18px 0;
+            text-align: center;
+            border-top: 1px solid #ced4da;
+            color: #555;
+            font-size: 0.95rem;
+            margin-top: 32px;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        @media (max-width: 992px) {
+            .table-responsive {
+                padding: 0.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
             .search-action-wrapper {
                 flex-direction: column;
                 align-items: stretch;
             }
 
-            .search-action-wrapper>div {
+            .search-box {
+                margin-right: 0;
+                margin-bottom: 0.7rem;
                 width: 100%;
-                margin-bottom: 10px;
+                max-width: 100%;
             }
 
-            .search-action-wrapper>div:last-child {
-                margin-bottom: 0;
+            .btn-success {
+                width: 100%;
             }
 
-            #openModalBtn-create {
+            .table-responsive {
+                padding: 0.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .table-responsive {
+                padding: 0;
+            }
+
+            .btn {
                 width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .d-flex.flex-sm-row {
+                flex-direction: column !important;
+            }
+
+            .btn-sm {
+                min-width: unset;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="mb-3 d-flex justify-content-between align-items-center search-action-wrapper flex-wrap gap-2">
-            <!-- Ô tìm kiếm giống Google -->
-            <div class="flex-grow-1 me-2">
-                <form th:action="@{/admin/nguoidung/timkiem}" method="get">
-                    <div class="search-box">
-                        <input type="text" name="keyword" placeholder="Tìm kiếm người dùng..." />
-                        <button type="submit" title="Tìm kiếm">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </form>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/admin}">Admin Panel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin}">Trang Chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/admin/nguoidung/tatca}">Người Dùng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/sanpham/tatca}">Sản Phẩm</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <button class="btn btn-outline-light" type="button">Đăng xuất</button>
+                </div>
             </div>
+        </div>
+    </nav>
 
-            <!-- Nút Thêm -->
-            <div>
-                <button id="openModalBtn-create" class="btn btn-success">
-                    <i class="fas fa-user-plus me-1"></i> Thêm Người Dùng
-                </button>
-            </div>
+    <div class="container">
+        <div class="mb-3 d-flex justify-content-between align-items-center search-action-wrapper flex-wrap">
+            <form th:action="@{/admin/nguoidung/timkiem}" method="get" class="flex-grow-1">
+                <div class="search-box">
+                    <input type="text" name="keyword" placeholder="Tìm kiếm người dùng..." />
+                    <button type="submit" title="Tìm kiếm">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+            <button id="openModalBtn-create" class="btn btn-success ms-2">
+                <i class="fas fa-user-plus me-1"></i> Thêm Người Dùng
+            </button>
         </div>
 
         <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
             Người dùng đã được cập nhật thành công!
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
-
         <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
             Không tìm thấy người dùng để sửa.
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
-
-        <!-- Success message for user creation -->
         <div th:if="${param.userCreatedSuccess}" class="alert alert-success alert-dismissible fade show" role="alert">
             Người dùng đã được tạo thành công!
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
 
-        <!-- Error message for user creation -->
-        <!-- <div th:if="${param.userCreatedError}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            Không thể tạo người dùng. Vui lòng thử lại.
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div> -->
-
-
         <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead class="table-dark">
+            <table class="table table-striped align-middle">
+                <thead>
                     <tr>
                         <th>STT</th>
-                        <th>ID</th>
+                        <!-- <th>ID</th> -->
                         <th>Tên đăng nhập</th>
                         <th>Email</th>
-                        <th>Mật khẩu</th>
+                        <!-- <th>Mật khẩu</th> -->
                         <th>Vai trò</th>
                         <th>Ngày tạo</th>
                         <th>Ngày cập nhật</th>
@@ -176,15 +255,15 @@
                 <tbody>
                     <tr th:each="user, iterStat : ${users}">
                         <td th:text="${iterStat.count}">1</td>
-                        <td th:text="${user.id}">001</td>
+                        <!-- <td th:text="${user.id}">001</td> -->
                         <td th:text="${user.tenDangNhap}">nguyenvana</td>
                         <td th:text="${user.email}">email</td>
-                        <td th:text="${user.matKhau}">********</td>
+                        <!-- <td th:text="${user.matKhau}">********</td> -->
                         <td th:text="${user.vaiTro}">Admin</td>
                         <td th:text="${#temporals.format(user.ngayTao, 'yyyy-MM-dd')}">2025-04-01</td>
                         <td th:text="${#temporals.format(user.ngayCapNhat, 'yyyy-MM-dd')}">2025-04-01</td>
                         <td>
-                            <div class="d-flex flex-column flex-sm-row gap-2">
+                            <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center">
                                 <a th:href="@{/admin/nguoidung/chitiet/{id}(id=${user.id})}"
                                     class="btn btn-success btn-sm">
                                     <i class="fas fa-eye"></i> Chi tiết
@@ -205,6 +284,7 @@
             </table>
         </div>
 
+        <!-- Modal Thêm Người Dùng -->
         <div class="modal fade" id="myModal-create" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
@@ -244,7 +324,10 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <footer class="footer">
+        <p>&copy; 2025 Admin Panel - All Rights Reserved</p>
+    </footer>
+
     <script>
         document.getElementById("openModalBtn-create").onclick = function () {
             const myModal = new bootstrap.Modal(document.getElementById('myModal-create'));

@@ -10,48 +10,221 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background-color: #f8f9fa;
+            background-color: #f4f6f8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            padding: 30px 10px;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .card {
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 420px;
+            overflow: hidden;
+            border: none;
         }
 
         .card-header {
             background-color: #007bff;
             color: white;
-            border-radius: 12px 12px 0 0;
+            border-radius: 15px 15px 0 0;
+            padding: 18px;
+            text-align: center;
+            font-size: 1.15rem;
+            font-weight: bold;
+        }
+
+        .card-body {
+            padding: 24px 18px;
+            background-color: white;
         }
 
         .form-label {
-            font-weight: 600;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #495057;
+            display: block;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            padding: 0.7rem 1rem;
+            font-size: 1rem;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            width: 100%;
+        }
+
+        .input-group .form-control {
+            border-right: none;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
         }
 
         .input-group-text {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            color: #495057;
+            border-left: none;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            padding: 0.7rem 1rem;
             cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+            border-radius: 8px;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .mb-3 {
+            margin-bottom: 1.2rem;
+        }
+
+        .navbar {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 0;
+            margin-bottom: 24px;
+        }
+
+        .navbar-nav {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            margin: 0 10px;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #f8f9fa;
+        }
+
+        .footer {
+            background-color: #e9ecef;
+            padding: 16px 0;
+            text-align: center;
+            border-top: 1px solid #ced4da;
+            color: #555;
+            font-size: 0.95rem;
+            margin-top: 32px;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 10px 2px;
+            }
+
+            .card {
+                max-width: 100%;
+                border-radius: 8px;
+            }
+
+            .card-header {
+                font-size: 1rem;
+                padding: 12px;
+            }
+
+            .card-body {
+                padding: 14px 6px;
+            }
+
+            .btn-primary {
+                padding: 0.7rem 1rem;
+                font-size: 0.98rem;
+            }
+
+            .footer {
+                font-size: 0.85rem;
+                padding: 10px 0;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="container py-4">
-        <div class="row justify-content-center">
-            <div class="col-12 col-sm-10 col-md-6">
-                <div class="card">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/admin}">Admin Panel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin}">Trang Chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/admin/nguoidung/tatca}">Người
+                            Dùng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/sanpham/tatca}">Sản Phẩm</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <button class="btn btn-outline-light" type="button">Đăng xuất</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center w-100">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+                <div class="card mx-auto">
                     <div class="card-header text-center">
                         <h5 class="mb-0">Sửa người dùng</h5>
                     </div>
                     <div class="card-body">
                         <form th:action="@{/admin/nguoidung/sua/{id}(id=${nguoiDung.id})}" method="post">
                             <div class="mb-3">
-                                <label class="form-label">Tên đăng nhập:</label>
-                                <input type="text" class="form-control" name="tenDangNhap"
+                                <label for="tenDangNhap" class="form-label">Tên đăng nhập:</label>
+                                <input type="text" class="form-control" id="tenDangNhap" name="tenDangNhap"
                                     th:value="${nguoiDung.tenDangNhap}" required>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Mật khẩu:</label>
+                                <label for="matKhau" class="form-label">Mật khẩu:</label>
                                 <div class="input-group">
                                     <input type="password" class="form-control" id="matKhau" name="matKhau"
                                         th:value="${nguoiDung.matKhau}" required>
@@ -68,6 +241,10 @@
             </div>
         </div>
     </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 Admin Panel - All Rights Reserved</p>
+    </footer>
 
     <script>
         function togglePassword() {
