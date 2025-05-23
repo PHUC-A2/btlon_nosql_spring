@@ -57,7 +57,7 @@ public class QuanLySanPhamController {
         return "admin/sanpham/chitiet_sanpham";
     }
 
-    // Get sử sản phẩm
+    // Get sửa sản phẩm
     @GetMapping("/sua/{id}")
     public String getSuaSanPham(@PathVariable String id, Model model) {
         SanPham sanPham = this.sanPhamService.laySanPhamById(id);

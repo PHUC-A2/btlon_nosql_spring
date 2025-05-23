@@ -12,35 +12,58 @@
         html,
         body {
             height: 100%;
-        }
-
-        body {
+            margin: 0;
+            padding: 0;
             background: linear-gradient(135deg, #e3f0ff 0%, #f8fafc 100%);
             font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
             color: #1a237e;
+        }
+
+        /* The main wrapper. No longer flex-row, just a container */
+        .wrapper {
             min-height: 100vh;
-            margin: 0;
+            display: flex;
+            /* Use flex to manage main content vs sidebar */
+            flex-direction: row;
+            /* Keep sidebar and main content side-by-side */
             padding: 0;
+            /* No padding here, managed by main-content */
         }
 
-        .container-fluid {
-            min-height: 100vh;
-            padding: 0;
-        }
-
-        .row {
-            margin: 0;
-        }
-
+        /* Sidebar styles */
         .sidebar {
             height: 100vh;
             background: linear-gradient(180deg, #232526 0%, #414345 100%);
             color: #fff;
-            transition: all 0.3s;
             box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
-            flex-shrink: 0;
             padding: 0;
+            width: 250px;
+            /* Fixed width for sidebar */
+            position: fixed;
+            /* Fixed position for all screens */
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1040;
+            /* Ensure it's above other content */
+            transition: transform 0.3s ease-in-out;
+            /* Smooth transition for offcanvas */
         }
+
+        /* Hide sidebar by default on small screens */
+        @media (max-width: 767.98px) {
+            .sidebar {
+                transform: translateX(-100%);
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                /* Add shadow for offcanvas */
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+                /* Show sidebar */
+            }
+        }
+
 
         .sidebar .nav-link {
             color: #bbdefb;
@@ -73,12 +96,25 @@
             font-weight: bold;
         }
 
+        /* Main content area */
         .main-content {
+            flex-grow: 1;
+            /* Takes up remaining space */
             display: flex;
             flex-direction: column;
             min-height: 100vh;
             background: transparent;
-            padding: 0;
+            padding-left: 0;
+            /* No padding here, handled by margin-left */
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        /* Push main content to the right when sidebar is visible */
+        @media (min-width: 768px) {
+            .main-content {
+                margin-left: 250px;
+                /* Matches sidebar width */
+            }
         }
 
         .navbar {
@@ -87,6 +123,13 @@
             flex-shrink: 0;
             padding-top: 12px;
             padding-bottom: 12px;
+        }
+
+        /* Hide toggler button on large screens */
+        @media (min-width: 768px) {
+            .navbar .navbar-toggler {
+                display: none;
+            }
         }
 
         .navbar-brand {
@@ -98,26 +141,65 @@
 
         .container-main {
             flex: 1 1 auto;
-            padding: 32px 32px 0 32px;
-            display: flex;
-            flex-direction: column;
+            padding: 32px;
+            /* Consistent padding for main content area */
             background: transparent;
         }
+
+        @media (max-width: 767.98px) {
+            .container-main {
+                padding: 16px;
+                /* Smaller padding on small screens */
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .container-main {
+                padding: 10px;
+                /* Even smaller padding for extra small screens */
+            }
+        }
+
 
         .mb-4 {
             margin-bottom: 28px !important;
         }
 
-        .row.g-4 {
+        /* Stat cards row */
+        .stat-cards-row {
             display: flex;
-            gap: 28px;
+            flex-wrap: wrap;
+            gap: 24px;
+            /* Slightly reduced gap for better fit */
             margin-bottom: 28px;
-            flex-shrink: 0;
+            justify-content: center;
+            /* Center cards when they wrap */
+            align-items: stretch;
+            /* Ensure cards have equal height if content varies */
         }
 
-        .col-md-4 {
-            flex: 1;
-            min-width: 0;
+        .stat-card-col {
+            flex: 1 1 calc(50% - 24px);
+            /* Two columns for medium screens */
+            max-width: calc(50% - 24px);
+            min-width: 280px;
+            /* Min width to prevent squishing */
+        }
+
+        @media (min-width: 992px) {
+            .stat-card-col {
+                flex: 1 1 calc(33.333% - 24px);
+                /* Three columns for large screens */
+                max-width: calc(33.333% - 24px);
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .stat-card-col {
+                flex: 1 1 100%;
+                /* Single column on small screens */
+                max-width: 100%;
+            }
         }
 
         .stat-card {
@@ -128,7 +210,8 @@
             min-height: 120px;
             background: linear-gradient(90deg, #1976d2 60%, #42a5f5 100%);
             color: #fff;
-            margin-bottom: 0;
+            height: 100%;
+            /* Make sure cards fill their column height */
         }
 
         .stat-card.bg-success {
@@ -171,79 +254,46 @@
             color: #ffc107;
         }
 
-        .main-content-columns {
+        /* Chart columns row */
+        .chart-columns-row {
             display: flex;
-            gap: 36px;
+            flex-wrap: wrap;
+            gap: 32px;
+            /* Slightly adjusted gap */
             flex-grow: 1;
-            width: 100%;
-            margin-bottom: 0;
+            justify-content: center;
+            /* Center charts when they wrap */
+            align-items: stretch;
+            /* Ensure charts have equal height if needed */
         }
 
-        .product-list-column,
-        .user-list-column {
-            flex: 1 1 0;
-            min-width: 0;
+        .chart-column {
+            flex: 1 1 calc(50% - 32px);
+            /* Two columns by default */
+            max-width: calc(50% - 32px);
+            min-width: 320px;
+            /* Minimum width for charts */
             display: flex;
             flex-direction: column;
-        }
-
-        .product-list-column {
-            margin-right: 0;
-        }
-
-        .user-list-column {
-            margin-left: 0;
-        }
-
-        .table-responsive {
-            border-radius: 16px;
-            overflow-x: auto;
             background: #fff;
+            border-radius: 16px;
             box-shadow: 0 2px 12px rgba(25, 118, 210, 0.07);
-            margin-bottom: 0;
-            flex: 1 1 0;
-            display: flex;
-            flex-direction: column;
-            padding: 12px 0 12px 0;
+            padding: 20px;
         }
 
-        .table {
-            margin-bottom: 0;
-            border-radius: 12px;
-            overflow: hidden;
-            min-width: 700px;
+        @media (max-width: 991.98px) {
+            .chart-column {
+                flex: 1 1 100%;
+                /* Single column on medium screens and down */
+                max-width: 100%;
+            }
+        }
+
+
+        .chart-container {
+            position: relative;
+            height: 300px;
             width: 100%;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .table th,
-        .table td {
-            padding: 12px 8px;
-            vertical-align: middle;
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        .table thead th {
-            background: #1976d2;
-            color: #fff;
-            border-bottom: 2px solid #42a5f5;
-        }
-
-        .table-info th {
-            background: #43cea2 !important;
-            color: #fff !important;
-            border-bottom: 2px solid #185a9d !important;
-        }
-
-        .table-hover tbody tr:hover {
-            background-color: #e3f2fd;
-        }
-
-        .badge {
-            font-weight: 500;
         }
 
         .footer {
@@ -259,212 +309,107 @@
             flex-shrink: 0;
             box-shadow: 0 -2px 12px rgba(25, 118, 210, 0.07);
         }
-
-        @media (max-width: 1200px) {
-            .main-content-columns {
-                flex-direction: column;
-                gap: 18px;
-            }
-
-            .container-main {
-                padding: 24px 8px 0 8px;
-            }
-
-            .table {
-                min-width: 600px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                height: auto;
-            }
-
-            .container-main {
-                padding: 16px 2px 0 2px;
-            }
-
-            .table {
-                min-width: 500px;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .table {
-                min-width: 400px;
-                font-size: 0.95rem;
-            }
-
-            .stat-card {
-                padding: 18px 0 10px 0;
-            }
-
-            .main-content-columns {
-                gap: 8px;
-            }
-
-            .container-main {
-                padding: 8px 0 0 0;
-            }
-        }
     </style>
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row g-0">
-            <!-- Sidebar -->
-            <nav class="col-md-2 sidebar p-0 d-flex flex-column">
-                <div class="admin-title">👑 ADMIN PANEL</div>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#"><i class="fas fa-home me-2"></i> Trang chủ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/admin/sanpham/tatca}"><i class="fas fa-box me-2"></i> Quản lý
-                            Sản phẩm</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/admin/nguoidung/tatca}"><i class="fas fa-users me-2"></i> Quản
-                            lý Người dùng</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#myModal"><i
-                                class="fas fa-user me-2"></i> Thông tin cá nhân</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="javascript:void(0);"
-                            onclick="document.getElementById('logoutForm').submit();"><i
-                                class="fas fa-sign-in-alt me-2"></i> Đăng xuất</a>
-                    </li>
-                    <form id="logoutForm" th:action="@{/logout}" method="post" style="display: none;"></form>
-                </ul>
+    <div class="wrapper">
+        <nav class="sidebar p-0 d-flex flex-column" id="offcanvasSidebar">
+            <div class="admin-title">👑 ADMIN PANEL</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#"><i class="fas fa-home me-2"></i> Trang chủ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/sanpham/tatca}"><i class="fas fa-box me-2"></i> Quản lý
+                        Sản phẩm</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/nguoidung/tatca}"><i class="fas fa-users me-2"></i> Quản
+                        lý Người dùng</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#myModal"><i
+                            class="fas fa-user me-2"></i> Thông tin cá nhân</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0);"
+                        onclick="document.getElementById('logoutForm').submit();"><i
+                            class="fas fa-sign-in-alt me-2"></i> Đăng xuất</a>
+                </li>
+                <form id="logoutForm" th:action="@{/logout}" method="post" style="display: none;"></form>
+            </ul>
+        </nav>
+
+        <div class="main-content d-flex flex-column">
+            <nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm px-4 sticky-top">
+                <button class="navbar-toggler d-md-none me-3" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <span class="navbar-brand mb-0 h4"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</span>
+                <div class="ms-auto d-flex align-items-center">
+                    <span class="me-3">Xin chào, <strong>Admin</strong></span>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#myModal"><img src="https://i.pravatar.cc/40"
+                            class="rounded-circle" alt="Avatar"></a>
+                </div>
             </nav>
-            <!-- Main -->
-            <div class="col-md-10 main-content d-flex flex-column p-0">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm px-4 sticky-top">
-                    <span class="navbar-brand mb-0 h4"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</span>
-                    <div class="ms-auto d-flex align-items-center">
-                        <span class="me-3">Xin chào, <strong>Admin</strong></span>
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#myModal"><img src="https://i.pravatar.cc/40"
-                                class="rounded-circle" alt="Avatar"></a>
-                    </div>
-                </nav>
-                <div class="container-main flex-grow-1 d-flex flex-column">
-                    <div class="mb-4">
-                        <a th:href="@{/admin/sanpham/tatca}" class="btn btn-modern"><i class="fas fa-box me-2"></i> Quản
-                            lý Sản phẩm</a>
-                        <a th:href="@{/admin/nguoidung/tatca}" class="btn btn-modern"><i class="fas fa-users me-2"></i>
-                            Quản lý Người dùng</a>
-                    </div>
-                    <div class="row g-4">
-                        <div class="col-md-4" data-aos="fade-up">
-                            <div class="stat-card">
-                                <h5>Tổng sản phẩm</h5>
-                                <h2 th:text="${tongSoSanPham}">0</h2>
-                            </div>
-                        </div>
-                        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                            <div class="stat-card bg-success">
-                                <h5>Người dùng</h5>
-                                <h2 th:text="${tongSoNguoiDung}">0</h2>
-                            </div>
+
+            <div class="container-main flex-grow-1 d-flex flex-column">
+                <div class="mb-4">
+                    <a th:href="@{/admin/sanpham/tatca}" class="btn btn-modern"><i class="fas fa-box me-2"></i> Quản
+                        lý Sản phẩm</a>
+                    <a th:href="@{/admin/nguoidung/tatca}" class="btn btn-modern"><i class="fas fa-users me-2"></i>
+                        Quản lý Người dùng</a>
+                </div>
+                <div class="stat-cards-row">
+                    <div class="stat-card-col" data-aos="fade-up">
+                        <div class="stat-card">
+                            <h5>Tổng sản phẩm</h5>
+                            <h2 th:text="${tongSoSanPham}">0</h2>
                         </div>
                     </div>
-                    <div class="main-content-columns flex-wrap mt-4">
-                        <div class="product-list-column" data-aos="fade-left">
-                            <h4 class="mb-3"><i class="fas fa-box me-2"></i>Danh sách sản phẩm</h4>
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover mt-3">
-                                    <thead>
-                                        <tr>
-                                            <th>STT</th>
-                                            <th>Tên</th>
-                                            <th>Loại</th>
-                                            <th>Thương hiệu</th>
-                                            <th>Giá</th>
-                                            <th>Màu sắc</th>
-                                            <th>Kích thước</th>
-                                            <th>Tình trạng</th>
-                                            <th>Ngày tạo</th>
-                                            <th>Ngày cập nhật</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="sanPham, iterStat : ${sanPhams}">
-                                            <td th:text="${iterStat.count}">1</td>
-                                            <td th:text="${sanPham.ten}">Áo sơ mi nam</td>
-                                            <td th:text="${sanPham.loai}">Áo</td>
-                                            <td th:text="${sanPham.thuongHieu}">Owen</td>
-                                            <td th:text="${sanPham.gia}">500.000đ</td>
-                                            <td th:text="${sanPham.mauSac}">Trắng</td>
-                                            <td th:text="${sanPham.kichThuoc}">M</td>
-                                            <td>
-                                                <span th:if="${sanPham.tinhTrang == 'Còn hàng'}"
-                                                    class="badge bg-success">Còn hàng</span>
-                                                <span th:if="${sanPham.tinhTrang != 'Còn hàng'}"
-                                                    class="badge bg-secondary" th:text="${sanPham.tinhTrang}"></span>
-                                            </td>
-                                            <td th:text="${#temporals.format(sanPham.ngayTao, 'dd/MM/yyyy')}">2025-05-07
-                                            </td>
-                                            <td th:text="${#temporals.format(sanPham.ngayCapNhat, 'dd/MM/yyyy')}">
-                                                2025-05-07</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="user-list-column" data-aos="fade-right" data-aos-delay="100">
-                            <h4 class="mb-3"><i class="fas fa-users me-2"></i>Danh sách người dùng</h4>
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover mt-3">
-                                    <thead class="table-info">
-                                        <tr>
-                                            <th>STT</th>
-                                            <th>Tên đăng nhập</th>
-                                            <th>Email</th>
-                                            <th>Vai trò</th>
-                                            <th>Ngày tạo</th>
-                                            <th>Ngày cập nhật</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="nguoiDung, iterStat : ${nguoiDungs}">
-                                            <td th:text="${iterStat.count}"></td>
-                                            <td th:text="${nguoiDung.tenDangNhap}">admin123</td>
-                                            <td th:text="${nguoiDung.email}">admin@example.com</td>
-                                            <td th:text="${nguoiDung.vaiTro}">Admin</td>
-                                            <td th:text="${#temporals.format(nguoiDung.ngayTao, 'dd/MM/yyyy')}">
-                                                2025-05-07</td>
-                                            <td th:text="${#temporals.format(nguoiDung.ngayCapNhat, 'dd/MM/yyyy')}">
-                                                2025-05-07</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div class="stat-card-col" data-aos="fade-up" data-aos-delay="100">
+                        <div class="stat-card bg-success">
+                            <h5>Người dùng</h5>
+                            <h2 th:text="${tongSoNguoiDung}">0</h2>
                         </div>
                     </div>
                 </div>
-                <!-- Footer nâng cấp, chỉ để 1 lần, luôn nằm cuối, nổi bật và responsive -->
-                <footer class="footer mt-auto shadow-sm">
-                    <div class="container">
-                        <div class="row align-items-center">
-                            <div class="col-md-6 text-md-start text-center mb-2 mb-md-0">
-                                <span class="fw-bold text-primary"><i class="fas fa-crown me-2"></i>Admin Panel</span>
-                                <span class="ms-2 text-secondary">| Trang quản trị hệ thống thời trang</span>
-                            </div>
-                            <div class="col-md-6 text-md-end text-center">
-                                <span class="text-secondary">&copy; 2025 - Thiết kế bởi <span
-                                        class="fw-semibold text-dark">Team 01</span></span>
-                            </div>
+                <div class="chart-columns-row mt-4">
+                    <div class="chart-column" data-aos="fade-left">
+                        <h4 class="mb-3"><i class="fas fa-chart-bar me-2"></i>Thống kê sản phẩm theo loại</h4>
+                        <div class="chart-container">
+                            <canvas id="productTypeChart"></canvas>
                         </div>
                     </div>
-                </footer>
+                    <div class="chart-column" data-aos="fade-right" data-aos-delay="100">
+                        <h4 class="mb-3"><i class="fas fa-chart-pie me-2"></i>Thống kê người dùng theo vai trò</h4>
+                        <div class="chart-container">
+                            <canvas id="userRoleChart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <footer class="footer mt-auto shadow-sm">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-6 text-md-start text-center mb-2 mb-md-0">
+                            <span class="fw-bold text-primary"><i class="fas fa-crown me-2"></i>Admin Panel</span>
+                            <span class="ms-2 text-secondary">| Trang quản trị hệ thống thời trang</span>
+                        </div>
+                        <div class="col-md-6 text-md-end text-center">
+                            <span class="text-secondary">&copy; 2025 - Thiết kế bởi <span
+                                    class="fw-semibold text-dark">Team 01</span></span>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
     </div>
 
-    <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content shadow-lg rounded-4">
@@ -524,8 +469,130 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         AOS.init();
+
+        // JavaScript for Chart.js
+        document.addEventListener('DOMContentLoaded', function () {
+            // Data for Product Type Chart (replace with your actual data from backend)
+            const productTypeData = {
+                labels: ['Áo', 'Quần', 'Váy', 'Giày', 'Phụ kiện'], // Example product types
+                datasets: [{
+                    label: 'Số lượng sản phẩm',
+                    data: [/* Populate with actual product counts per type */ 150, 120, 80, 50, 30], // Example data
+                    backgroundColor: [
+                        'rgba(25, 118, 210, 0.7)', // Blue
+                        'rgba(66, 165, 245, 0.7)', // Light Blue
+                        'rgba(76, 175, 80, 0.7)',  // Green
+                        'rgba(255, 193, 7, 0.7)',  // Amber
+                        'rgba(244, 67, 54, 0.7)'   // Red
+                    ],
+                    borderColor: [
+                        'rgba(25, 118, 210, 1)',
+                        'rgba(66, 165, 245, 1)',
+                        'rgba(76, 175, 80, 1)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(244, 67, 54, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            const productTypeConfig = {
+                type: 'bar',
+                data: productTypeData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: false,
+                            text: 'Thống kê sản phẩm theo loại'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Số lượng'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Loại sản phẩm'
+                            }
+                        }
+                    }
+                }
+            };
+
+            var productTypeChart = new Chart(
+                document.getElementById('productTypeChart'),
+                productTypeConfig
+            );
+
+            // Data for User Role Chart (replace with your actual data from backend)
+            const userRoleData = {
+                labels: ['Admin', 'User'], // Example user roles
+                datasets: [{
+                    label: 'Số lượng người dùng',
+                    data: [/* Populate with actual user counts per role */ 5, 200], // Example data
+                    backgroundColor: [
+                        'rgba(25, 118, 210, 0.8)', // Blue
+                        'rgba(76, 175, 80, 0.8)'  // Green
+                    ],
+                    borderColor: [
+                        'rgba(25, 118, 210, 1)',
+                        'rgba(76, 175, 80, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            const userRoleConfig = {
+                type: 'pie', // Or 'doughnut' for a different look
+                data: userRoleData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: false,
+                            text: 'Thống kê người dùng theo vai trò'
+                        }
+                    }
+                }
+            };
+
+            var userRoleChart = new Chart(
+                document.getElementById('userRoleChart'),
+                userRoleConfig
+            );
+
+            // Fetch dynamic data for charts using Thymeleaf attributes (example)
+            // You'll need to pass this data from your Spring Boot controller
+            // Example:
+            // const productTypeCounts = /*[[${productTypeCounts}]]*/ {}; // Assuming productTypeCounts is a Map<String, Long>
+            // const userRoleCounts = /*[[${userRoleCounts}]]*/ {}; // Assuming userRoleCounts is a Map<String, Long>
+
+            // If you have data from Thymeleaf, you can update the chart data like this:
+            // productTypeChart.data.labels = Object.keys(productTypeCounts);
+            // productTypeChart.data.datasets[0].data = Object.values(productTypeCounts);
+            // productTypeChart.update();
+
+            // userRoleChart.data.labels = Object.keys(userRoleCounts);
+            // userRoleChart.data.datasets[0].data = Object.values(userRoleCounts);
+            // userRoleChart.update();
+        });
     </script>
 </body>
 
