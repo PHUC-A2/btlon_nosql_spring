@@ -1,4 +1,4 @@
-package com.example.quanlysanphamthoitrang.controller.user;
+package com.example.quanlysanphamthoitrang.controller;
 
 import java.util.List;
 
@@ -21,6 +21,6 @@ public class TrangChuController {
     public String trangChu(Model model) {
         List<SanPham> sanPhams = this.sanPhamService.layTatCaSanPham();
         model.addAttribute("sanPhams", sanPhams);
-        return "user/trang_chu";
+        return "trang_chu";
     }
 }
